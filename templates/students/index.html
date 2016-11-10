@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load thumbnail %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://getbootstrap.com/favicon.ico">
+
+    <title>USG</title>
+    <link href="{% static "css/layout.css" %}" rel="stylesheet" type="text/css" />
+    <link href="{% static "css/modal.css" %}" rel="stylesheet" type="text/css" />
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+            <span class="sr-only">Toggle navigation</span>
+          <a class="navbar-brand">STUDENTS DATABASE</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'index' %}">Home</a>
+                    {% if user.is_authenticated %}
+                    <a>{{user.username}}</a>
+                    <a href="/students/logout/">Logout</a><br />
+                    {% else %}
+                    <a href="#login_form" id="login_pop">Log In</a>
+                    <a href="/students/register/">Register Here</a>
+                    {% endif %}
+                   </li>
+              </ul>
+        </div>
+      </div>
+    </div>
+
+
+
+    <a href="#x" class="overlay" id="login_form"></a>
+        <div class="popup">
+            <form id="login_form" method="post" action="/students/login/">
+            {% csrf_token %}
+            <h2>Welcome Guest!</h2>
+            <p>Please enter your login and password here</p>
+            <div>
+                <label for="login">Login</label>
+                <input type="text" name="username" value=""/>
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" name="password" value="" />
+            </div>
+            <input type="submit" value="Log In" />
+
+            <a class="close" href="#close"></a>
+            </form>
+        </div>
+
+    {% thumbnail "http://www.nextgen-gallery.com/wp-content/uploads/2008/12/abend.jpg" "40x40" crop="80% top" as im %}
+        <img src="{{ im.url }}">
+    {% endthumbnail %}
+
+
+     {% if user.is_authenticated %}
+    <div class="container" style="margin-top:300px">
+      <h2>PRINCETON UNIVERSITY</h2>
+      <p>Student groups</p>
+
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>GROUP NUMBER</th>
+            <th>STUDENTS</th>
+            <th>GROUP LEADER</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for i in final_data %}
+            <tr>
+            <td><a href="/students/{{ i.group_number }}/">{{ i.group_number }}</a></td>
+            <td>{{ i.people_number }}</td>
+            <td>{{ i.leader_name }}</td>
+            </tr>
+        {% endfor %}
+
+       </tbody>
+      </table>
+
+    <a href = "/students/addgroup/"><button>ADD GROUP</button></a>
+    <a href = "{% url 'addstudent' %}"><button>ADD A STUDENT</button></a>
+
+
+    </div>
+
+    {% else %}
+     <div class="container" style="margin-top:300px">
+      <img src="{% static  "images/princeton-logo.png" %}" alt="Picture of Rango" />
+    </div>
+
+    {% endif %}
+
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

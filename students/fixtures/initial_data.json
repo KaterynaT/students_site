@@ -1,0 +1,204 @@
+[
+  {
+    "model": "students.Student",
+    "pk": 1,
+    "fields": {
+      "first_name": "John",
+      "last_name": "Clark",
+      "patronymic": "Robert",
+      "sic_number": "2900",
+      "group_number": 1
+
+    }
+  },
+  {
+    "model": "students.Student",
+    "pk": 2,
+    "fields": {
+      "first_name": "Mary",
+      "last_name": "Prince",
+      "patronymic": "Houg",
+      "sic_number": "2000",
+      "group_number": 1
+    }
+  },
+   {
+    "model": "students.Student",
+    "pk": 3,
+    "fields": {
+      "first_name": "Elly",
+      "last_name": "Rade",
+      "patronymic": "Rob",
+      "sic_number": "7890",
+      "group_number": 1
+    }
+  },
+   {
+    "model": "students.Student",
+    "pk": 4,
+    "fields": {
+      "first_name": "Rita",
+      "last_name": "Portman",
+      "patronymic": "Robert",
+      "sic_number": "7345",
+      "group_number": 2
+    }
+  },
+   {
+    "model": "students.Student",
+    "pk": 5,
+    "fields": {
+      "first_name": "Rick",
+      "last_name": "Clinton",
+      "patronymic": "John",
+      "sic_number": "7770",
+      "group_number": 2
+    }
+  },
+   {
+    "model": "students.Student",
+    "pk": 6,
+    "fields": {
+      "first_name": "Anna",
+      "last_name": "Perg",
+      "patronymic": "Rodriges",
+      "sic_number": "4900",
+      "group_number": 2
+    }
+  },
+   {
+    "model": "students.Student",
+    "pk": 7,
+    "fields": {
+      "first_name": "Anthony",
+      "last_name": "Clop",
+      "patronymic": "Richard",
+      "sic_number": "3390",
+      "group_number": 3
+    }
+  },
+   {
+    "model": "students.Student",
+    "pk": 8,
+    "fields": {
+      "first_name": "Rebecca",
+      "last_name": "Fish",
+      "patronymic": "John",
+      "sic_number": "3211",
+      "group_number": 3
+    }
+  },
+   {
+    "model": "students.Student",
+    "pk": 9,
+    "fields": {
+      "first_name": "Olivia",
+      "last_name": "Brandt",
+      "patronymic": "Frent",
+      "sic_number": "0700",
+      "group_number": 3
+    }
+  },
+   {
+    "model": "students.Student",
+    "pk":10 ,
+    "fields": {
+      "first_name": "Theodor",
+      "last_name": "Dryzer",
+      "patronymic": "Joshua",
+      "sic_number": "7611",
+      "group_number": 1
+    }
+  },
+   {
+    "model": "students.Student",
+    "pk": 11,
+    "fields": {
+      "first_name": "Linda",
+      "last_name": "Perk",
+      "patronymic": "Rotter",
+      "sic_number": "6660",
+      "group_number": 2
+    }
+  },
+   {
+    "model": "students.Student",
+    "pk": 12,
+    "fields": {
+      "first_name": "Tory",
+      "last_name": "Benson",
+      "patronymic": "Loft",
+      "sic_number": "2550",
+      "group_number": 3
+    }
+  },
+   {
+    "model": "students.Student",
+    "pk": 13,
+    "fields": {
+      "first_name": "Romen",
+      "last_name": "Rollan",
+      "patronymic": "Fright",
+      "sic_number": "2411",
+      "group_number": 3
+    }
+  },
+  {
+    "model": "students.Student",
+    "pk": 14,
+    "fields": {
+      "first_name": "Whitney",
+      "last_name": "Roll",
+      "patronymic": "Fght",
+      "sic_number": "411",
+      "group_number": 2
+    }
+  },
+  {
+    "model": "students.Student",
+    "pk": 15,
+    "fields": {
+      "first_name": "Harry",
+      "last_name": "Roll",
+      "patronymic": "Fot",
+      "sic_number": "2411",
+      "group_number": 1
+    }
+  },
+  {
+    "model": "students.Student",
+    "pk": 16,
+    "fields": {
+      "first_name": "Parry",
+      "last_name": "Rouy",
+      "patronymic": "Filthy",
+      "sic_number": "2455511",
+      "group_number": 1
+    }
+  },
+
+{
+    "model": "students.Group",
+    "pk": 1,
+    "fields": {
+      "leader": 1,
+      "group": 1
+    }
+  },
+  {
+   "model": "students.Group",
+    "pk": 2,
+    "fields": {
+      "leader": 4,
+      "group": 2
+    }
+  },
+   {
+    "model": "students.Group",
+    "pk": 3,
+    "fields": {
+      "leader": 7,
+      "group": 3
+    }
+  }
+]

@@ -1,0 +1,78 @@
+{% load staticfiles %}
+{% load thumbnail %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://getbootstrap.com/favicon.ico">
+
+    <title>USG</title>
+
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <span class="sr-only">Toggle navigation</span>
+                <a class="navbar-brand">STUDENTS DATABASE</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{% url 'index' %}">Home</a>
+                        {% if user.is_authenticated %}
+                            <a>{{ user.username }}</a>
+                            <a href="/students/logout/">Logout</a><br/>
+                        {% else %}
+                            <a href="#login_form" id="login_pop">Log In</a>
+                            <a href="/students/register/">Register Here</a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top:300px">
+        <h2>Students of the group {{ group_number }} </h2>
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Picture</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in query_results %}
+                <tr>
+                    <td><a href="{% url 'editstudent' item.id %}">{{ item.first_name }}</a></td>
+                    <td>{{ item.last_name }}</td>
+
+
+                    <td>
+                        {% thumbnail item.picture "40x40" crop="80% top" as im %}
+                            <img src="{{ im.url }}">
+                        {% endthumbnail %}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+    </div>
+</body>
