@@ -1,3 +1,10 @@
 from django.test import TestCase
+from students.models import Student, Group
 
-# Create your tests here.
+
+
+
+class Create_Group_Test(TestCase):
+    def setUp(self):
+        Student.objects.create(group = 'group 3', leader ='John Clark. Robert.')
+

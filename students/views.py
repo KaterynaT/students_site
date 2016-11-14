@@ -9,8 +9,11 @@ from students.forms import AddGroupForm, AddStudentForm, UserForm, UserProfileFo
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from students.models import Group, Student
+from students.models import Group, Student, Info_About_Models
 from django.core.urlresolvers import reverse
+from django.db.models.signals import post_init, post_save, post_delete
+from django.dispatch import receiver
+from datetime import datetime
 
 
 def index(request):
@@ -75,8 +78,9 @@ def student(request, pk=None):
                 edit_form = AddStudentForm(instance=student)
         else:
             student = get_object_or_404(Student, pk=pk)
+            student_edit = Student.objects.get(id=pk)
             edit_form = AddStudentForm(instance=student)
-        return render(request, 'students/editstudent.html', {'form': edit_form, 'pk': pk})
+        return render(request, 'students/editstudent.html', {'form': edit_form, 'pk': pk, 'student_edit': student_edit})
     else:
         if request.method == 'POST':
             add_sform = AddStudentForm(data=request.POST)
@@ -156,3 +160,45 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/students/')
 
+
+
+# @receiver(request_finished)
+# def my_callback(sender, **kwargs):
+#     print "Request finished!"
+
+@receiver(post_save, sender = Student) # редактирование записи (модель Students)
+def post_save_students(sender, **kwargs):
+    i_a_m = Info_About_Models(model_name='Student')
+    i_a_m.model_editing = datetime.now()
+    i_a_m.save()
+
+
+@receiver(post_init, sender = Student) # создание новой записи (модель Students)
+def post_init_students(sender, **kwargs):
+    i_a_m=Info_About_Models(model_name='Student')
+    i_a_m.model_create=datetime.now()
+    i_a_m.save()
+
+@receiver(post_delete, sender = Student) #  удаление записи (модель Students)
+def post_delete_students(instance, **kwargs):
+    i_a_m=Info_About_Models(model_name='Student')
+    i_a_m.model_delete=datetime.now()
+    i_a_m.save()
+
+@receiver(post_init, sender = Group) # создание новой записи (модель Groups)
+def post_init_groups(sender, **kwargs):
+    i_a_m=Info_About_Models(model_name='Group')
+    i_a_m.model_create=datetime.now()
+    i_a_m.save()
+
+@receiver(post_save, sender = Group) # редактирование записи (модель Groups)
+def post_save_groups(sender, **kwargs):
+    i_a_m=Info_About_Models(model_name='Group')
+    i_a_m.model_editing=datetime.now()
+    i_a_m.save()
+
+@receiver(post_delete, sender = Group) # удаление записи (модель Groups)
+def post_delete_groups(sender, **kwargs):
+    i_a_m=Info_About_Models(model_name='Group')
+    i_a_m.model_delete=datetime.now()
+    i_a_m.save()

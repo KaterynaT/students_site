@@ -35,14 +35,13 @@
                     <a href="/students/logout/">Logout</a><br />
                     {% else %}
                     <a href="#login_form" id="login_pop">Log In</a>
-                    <a href="/students/register/">Register Here</a>
+                    <a href="#register_form">Register Here</a>
                     {% endif %}
                    </li>
               </ul>
         </div>
       </div>
     </div>
-
 
 
     <a href="#x" class="overlay" id="login_form"></a>
@@ -64,6 +63,39 @@
             <a class="close" href="#close"></a>
             </form>
         </div>
+
+    <a href="#x" class="overlay" id="register_form"></a>
+        <div class="popup">
+            <form id="login_form" method="post" action="/students/register/" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2>Welcome Guest! You may register here</h2>
+            <div>
+                <label for="login">Name</label>
+                <input type="text" name="username" value=""/>
+            </div>
+            <div>
+                <label for="login">Email</label>
+                <input type="email" name="email" value=""/>
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" name="password" value="" />
+            </div>
+            <div>
+                <label for="login">Picture</label>
+                <input type="file" name="picture" value=""/>
+            </div>
+           
+            <input type="submit" name="submit" value="Register" />
+
+            <a class="close" href="#close"></a>
+            </form>
+        </div>
+
+
+
+
+
 
     {% thumbnail "http://www.nextgen-gallery.com/wp-content/uploads/2008/12/abend.jpg" "40x40" crop="80% top" as im %}
         <img src="{{ im.url }}">
@@ -109,6 +141,7 @@
     {% endif %}
 
 
+    <p>{{ settings.MIDDLEWARE }}</p>
 
 
 

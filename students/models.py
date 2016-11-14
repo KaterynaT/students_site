@@ -2,6 +2,17 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class Info_About_Models(models.Model):
+    model_name=models.CharField(max_length=255,verbose_name=u'Имя модели')
+    model_create=models.CharField(max_length=255,verbose_name=u'Информация о создании новой записи в модель')
+    model_editing=models.CharField(max_length=255,verbose_name=u'Информация о редактировании модели')
+    model_delete=models.CharField(max_length=255,verbose_name=u'Информация об удалении записи из модели')
+    class Meta:
+        verbose_name_plural = "Информация о моделях"
+
+    def __unicode__(self):
+        return self.model_name
+
 
 class Student(models.Model):
     first_name = models.CharField(max_length=128)
