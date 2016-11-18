@@ -81,20 +81,12 @@
                 <label for="password">Password</label>
                 <input type="password" name="password" value="" />
             </div>
-            <div>
-                <label for="login">Picture</label>
-                <input type="file" name="picture" value=""/>
-            </div>
            
             <input type="submit" name="submit" value="Register" />
 
             <a class="close" href="#close"></a>
             </form>
         </div>
-
-
-
-
 
 
     {% thumbnail "http://www.nextgen-gallery.com/wp-content/uploads/2008/12/abend.jpg" "40x40" crop="80% top" as im %}
@@ -110,7 +102,7 @@
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th>GROUP NUMBER</th>
+            <th>GROUP</th>
             <th>STUDENTS</th>
             <th>GROUP LEADER</th>
           </tr>
@@ -118,7 +110,7 @@
         <tbody>
         {% for i in final_data %}
             <tr>
-            <td><a href="/students/{{ i.group_number }}/">{{ i.group_number }}</a></td>
+            <td><a href="/students/{{ i.group_name }}/">{{ i.group_name }}</a></td>
             <td>{{ i.people_number }}</td>
             <td>{{ i.leader_name }}</td>
             </tr>
@@ -129,7 +121,6 @@
 
     <a href = "/students/addgroup/"><button>ADD GROUP</button></a>
     <a href = "{% url 'addstudent' %}"><button>ADD A STUDENT</button></a>
-
 
     </div>
 
