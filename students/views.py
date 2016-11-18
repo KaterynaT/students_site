@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from students.forms import AddGroupForm, AddStudentForm, UserForm, UserProfileForm
+from students.forms import AddGroupForm, AddStudentForm, UserForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
@@ -18,30 +18,28 @@ from datetime import datetime
 
 def index(request):
 
-    counted_group = Student.objects.values('group_number_id').annotate(Count("id"))
+    counted_group = Student.objects.values('group_name_id').annotate(Count("id"))
     final_data = []
     for counted_obj in counted_group:
         leader_fmt = {}
-        group_obj = Group.objects.filter(id=counted_obj['group_number_id'])
+        group_obj = Group.objects.filter(id=counted_obj['group_name_id'])
         leader_id = group_obj[0].leader_id
         leader_obj = Student.objects.get(pk=leader_id)
         first_name = leader_obj.first_name
         leader_fmt['people_number'] = counted_obj['id__count']
-        leader_fmt['group_number'] = group_obj[0].group
+        leader_fmt['group_name'] = group_obj[0].group
         leader_fmt['leader_name'] = first_name
         final_data.append(leader_fmt)
 
+    return render (request, 'students/index.html', {'final_data': final_data})
 
-    return render (request, 'students/index.html',
-        {'final_data': final_data}
-                   )
 
-def group(request,group_number):
-    a = Group.objects.get(group=group_number).pk
-    query_results = Student.objects.filter(group_number= a).values()
+def group(request,group_name):
+    a = Group.objects.get(group=group_name).pk
+    query_results = Student.objects.filter(group_name= a).values()
     pictures = Student.objects.all()
     return render(request,'students/group.html',
-                              {'query_results': query_results, 'pictures': pictures}
+                              {'group_name': group_name, 'query_results': query_results, 'pictures': pictures}
                               )
 
 
@@ -53,77 +51,63 @@ def addgroup(request):
 
     else:
         add_gform = AddGroupForm()
-    return render(request,
-                  'students/addgroup.html',
-                  {'add_gform': add_gform}
-                  )
+    return render(request, 'students/addgroup.html', {'add_gform': add_gform})
 
-def student(request, pk=None):
-    if pk:
-        if request.POST:
 
-            edit_form = AddStudentForm(request.POST, request.FILES)
+def edit_student(request, pk=None):
+    if request.POST:
 
-            if edit_form.is_valid():
-                student = Student.objects.get(pk=pk)
-                edit_form = AddStudentForm(request.POST, instance=student)
-                edit = edit_form.save()
-                edit.picture = request.FILES['picture']
-                edit.save()
+        edit_form = AddStudentForm(request.POST, request.FILES)
 
-                return redirect(reverse('index'))
+        if edit_form.is_valid():
+            student = Student.objects.get(pk=pk)
+            edit_form = AddStudentForm(request.POST, instance=student)
+            edit = edit_form.save()
+            edit.picture = request.FILES['picture']
+            edit.save()
 
-            else:
-                student = Student.objects.get(pk=pk)
-                edit_form = AddStudentForm(instance=student)
+            return redirect(reverse('index'))
+
         else:
-            student = get_object_or_404(Student, pk=pk)
-            student_edit = Student.objects.get(id=pk)
+            student = Student.objects.get(pk=pk)
             edit_form = AddStudentForm(instance=student)
-        return render(request, 'students/editstudent.html', {'form': edit_form, 'pk': pk, 'student_edit': student_edit})
+            student_edit = Student.objects.get(id=pk)
     else:
-        if request.method == 'POST':
+        student = get_object_or_404(Student, pk=pk)
+        student_edit = Student.objects.get(id=pk)
+        edit_form = AddStudentForm(instance=student)
+    return render(request, 'students/editstudent.html', {'form': edit_form, 'pk': pk, 'student_edit': student_edit})
+
+
+def add_student(request):
+        if request.POST:
             add_sform = AddStudentForm(data=request.POST)
             add = add_sform.save()
             add.picture = request.FILES['picture']
             add.save()
             return redirect(reverse('index'))
-
         else:
             add_sform = AddStudentForm()
 
-        return render(request,
-                      'students/addstudent.html',
-                      {'add_sform': add_sform}
-                      )
-
+        return render(request, 'students/addstudent.html', {'add_sform': add_sform})
 
 
 def register(request):
     registered = False
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
-        profile_form = UserProfileForm(data=request.POST)
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid():
             user = user_form.save()
             user.set_password(user.password)
             user.save()
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
-            profile.save()
             registered = True
-
         else:
-            print user_form.errors, profile_form.errors
-
+            print user_form.errors
     else:
         user_form = UserForm()
-        profile_form = UserProfileForm()
     return render(request,
                   'students/register.html',
-                  {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+                  {'user_form': user_form, 'registered': registered})
 
 
 def user_login(request):
@@ -135,18 +119,14 @@ def user_login(request):
         user = authenticate(username=username, password=password)
         if user:
             if user.is_active:
-
                 login(request, user)
                 return HttpResponseRedirect('/students/')
             else:
                 return HttpResponse("Your account is disabled.")
         else:
-
             print "Invalid login details: {0}, {1}".format(username, password)
             return HttpResponse("Invalid login details supplied.")
-
     else:
-
         return render(request, 'students/login.html', {})
 
 
@@ -161,11 +141,6 @@ def user_logout(request):
     return HttpResponseRedirect('/students/')
 
 
-
-# @receiver(request_finished)
-# def my_callback(sender, **kwargs):
-#     print "Request finished!"
-
 @receiver(post_save, sender = Student) # редактирование записи (модель Students)
 def post_save_students(sender, **kwargs):
     i_a_m = Info_About_Models(model_name='Student')
@@ -179,11 +154,13 @@ def post_init_students(sender, **kwargs):
     i_a_m.model_create=datetime.now()
     i_a_m.save()
 
+
 @receiver(post_delete, sender = Student) #  удаление записи (модель Students)
 def post_delete_students(instance, **kwargs):
     i_a_m=Info_About_Models(model_name='Student')
     i_a_m.model_delete=datetime.now()
     i_a_m.save()
+
 
 @receiver(post_init, sender = Group) # создание новой записи (модель Groups)
 def post_init_groups(sender, **kwargs):
@@ -191,11 +168,13 @@ def post_init_groups(sender, **kwargs):
     i_a_m.model_create=datetime.now()
     i_a_m.save()
 
+
 @receiver(post_save, sender = Group) # редактирование записи (модель Groups)
 def post_save_groups(sender, **kwargs):
     i_a_m=Info_About_Models(model_name='Group')
     i_a_m.model_editing=datetime.now()
     i_a_m.save()
+
 
 @receiver(post_delete, sender = Group) # удаление записи (модель Groups)
 def post_delete_groups(sender, **kwargs):
