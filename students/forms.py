@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from django import forms
 from django.contrib.auth.models import User
-from students.models import Student, Group, UserProfile
+from students.models import Student, Group
 
 
 class UserForm(forms.ModelForm):
@@ -11,11 +11,6 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password')
-
-class UserProfileForm(forms.ModelForm):
-    class Meta:
-        model = UserProfile
-        fields = ('picture',)
 
 class AddGroupForm(forms.ModelForm):
     class Meta:
@@ -26,6 +21,12 @@ class AddGroupForm(forms.ModelForm):
 class AddStudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ('id', 'first_name', 'last_name', 'patronymic', 'st_birth','sic_number', 'group_number', 'picture')
-
+        fields = ('id',
+                  'first_name',
+                  'last_name',
+                  'patronymic',
+                  'birth',
+                  'sic_number',
+                  'group_name',
+                  'picture')
 
